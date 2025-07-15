@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+          header {
+            background-color: #fff;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            padding-left: 50px;
+            padding-right: 50px;
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 9999999;
+            top: 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            color: #333232;
+        }
+
+        nav span {
+            color: #f86605;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #333232;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #f86605;
+        }
+
+        .menu-container {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .menu-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .menu-subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f1f5f9;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .select-all-container:hover {
+            border-color: #e2e8f0;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .custom-checkbox.checked {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .custom-checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .custom-checkbox.checked::after {
+            opacity: 1;
+        }
+
+        .checkbox-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.95rem;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .menu-item {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #374151;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #3b82f6;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .menu-item:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+        }
+
+        .menu-item.selected {
+            border-color: #3b82f6;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+        }
+
+        .menu-item.selected::before {
+            left: 0;
+        }
+
+        .item-name {
+            font-weight: 600;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: inherit;
+        }
+
+        .total-section {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            color: white;
+        }
+
+        .total-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.025em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .menu-container {
+                padding: 24px;
+                border-radius: 20px;
+            }
+
+            .menu-title {
+                font-size: 1.75rem;
+            }
+
+            .menu-item {
+                padding: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .item-price {
+                align-self: flex-end;
+            }
+
+            .total-amount {
+                font-size: 1.75rem;
+            }
+        }
+
+        @media (min-width: 601px) and (max-width: 900px) {
+            .menu-container {
+                max-width: 520px;
+            }
+        }
+
+        @media (min-width: 901px) {
+            .menu-container {
+                max-width: 480px;
+            }
+        }
+
+        /* Hidden actual checkbox */
+        #semua {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+     <header>
+        <nav>
+            <h2 style="color: #333232;">Dawud <span>.</span></h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="P2_Dawud.html">Praktikum</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="menu-container" style="margin-top: 30px;">
+        <div class="menu-header">
+            <h1 class="menu-title">☕ Menu Kafe</h1>
+            <p class="menu-subtitle">Pilih minuman favorit Anda</p>
+        </div>
+
+        <div class="select-all-container">
+            <label class="checkbox-wrapper" for="semua">
+                <div class="custom-checkbox" id="checkbox-visual"></div>
+                <span class="checkbox-label">Pilih Semua</span>
+                <input type="checkbox" id="semua">
+            </label>
+        </div>
+
+        <div class="menu-items">
+            <button class="menu-item" data-price="6000">
+                <span class="item-name">🍃 Green Tea</span>
+                <span class="item-price">Rp 6.000</span>
+            </button>
+            <button class="menu-item" data-price="7000">
+                <span class="item-name">☕ Vanilla Latte</span>
+                <span class="item-price">Rp 7.000</span>
+            </button>
+            <button class="menu-item" data-price="8000">
+                <span class="item-name">🍪 Dancow Oreo</span>
+                <span class="item-price">Rp 8.000</span>
+            </button>
+            <button class="menu-item" data-price="9000">
+                <span class="item-name">🍋 Lemon Tea</span>
+                <span class="item-price">Rp 9.000</span>
+            </button>
+            <button class="menu-item" data-price="10000">
+                <span class="item-name">🥭 Dancow Mango</span>
+                <span class="item-price">Rp 10.000</span>
+            </button>
+        </div>
+
+        <div class="total-section">
+            <div class="total-label">Total Harga</div>
+            <div class="total-amount" id="total">Rp 0</div>
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.menu-item');
+        const harga = document.getElementById('total');
+        const checkbox = document.getElementById('semua');
+        const checkboxVisual = document.getElementById('checkbox-visual');
+        let total = 0;
+        
+        function updateCheckboxVisual() {
+            if (checkbox.checked) {
+                checkboxVisual.classList.add('checked');
+            } else {
+                checkboxVisual.classList.remove('checked');
+            }
+        }
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const price = parseInt(button.getAttribute('data-price'));
+
+                if (button.classList.contains('selected')) {
+                    button.classList.remove('selected');
+                    total -= price;
+                } else {
+                    button.classList.add('selected');
+                    total += price;
+                }
+                
+                updateTotal();
+                updateSelectAllState();
+            });
+        });
+
+        checkbox.addEventListener('change', () => {
+            total = 0;
+
+            buttons.forEach(button => {
+                const price = parseInt(button.getAttribute('data-price'));
+
+                if (checkbox.checked) {
+                    button.classList.add('selected');
+                    total += price;
+                } else {
+                    button.classList.remove('selected');
+                }
+            });
+
+            updateTotal();
+            updateCheckboxVisual();
+        });
+
+        function updateTotal() {
+            harga.textContent = "Rp " + total.toLocaleString('id-ID');
+        }
+
+        function updateSelectAllState() {
+            const selectedItems = document.querySelectorAll('.menu-item.selected');
+            checkbox.checked = selectedItems.length === buttons.length;
+            updateCheckboxVisual();
+        }
+
+        updateCheckboxVisual();
+    </script>
+</body>
+</html>
